@@ -6,7 +6,7 @@ rootProject.name = 'rsi-ds-pdf-service'
 gradle.beforeProject { project ->
     project.configurations.configureEach { configuration ->
         configuration.resolutionStrategy.dependencySubstitution { substitutions ->
-            substitutions.substitute module('com.fasterxml.jackson.core:jackson-databind') using module('com.fasterxml.jackson.core:jackson-databind:2.22.1')
+            substitutions.substitute module('com.fasterxml.jackson.core:jackson-databind') using module('com.fasterxml.jackson.core:jackson-databind:2.22.2')
         }
     }
 }
