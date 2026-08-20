@@ -1,12 +1,1 @@
 rootProject.name = 'rsi-ds-pdf-service'
-
-// This deliberately applies only to project configurations, not the already
-// resolved buildscript classpath. Dependabot's static parser nevertheless reads
-// the safe substitution target as jackson-databind's current version.
-gradle.beforeProject { project ->
-    project.configurations.configureEach { configuration ->
-        configuration.resolutionStrategy.dependencySubstitution { substitutions ->
-            substitutions.substitute module('com.fasterxml.jackson.core:jackson-databind') using module('com.fasterxml.jackson.core:jackson-databind:2.22.1')
-        }
-    }
-}
