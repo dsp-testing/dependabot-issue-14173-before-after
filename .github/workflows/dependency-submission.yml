@@ -1,0 +1,32 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  dependency-submission:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Record Gradle resolution
+        run: |
+          ./gradlew buildEnvironment | tee build-environment.txt
+          ./gradlew dependencies --configuration runtimeClasspath | tee project-dependencies.txt
+          ./gradlew buildscriptDependencyInsight | tee buildscript-dependency-insight.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gradle-resolution-${{ github.sha }}
+          path: |
+            build-environment.txt
+            project-dependencies.txt
+            buildscript-dependency-insight.txt
+      - uses: gradle/actions/dependency-submission@v4

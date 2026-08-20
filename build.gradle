@@ -1,0 +1,38 @@
+import org.gradle.api.tasks.diagnostics.DependencyInsightReportTask
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'org.springframework.boot'
+
+group = 'net.rgare'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Requests jackson-databind transitively. settings.gradle substitutes only
+    // the project configuration occurrence to 2.22.1.
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.10'
+}
+
+// spring-boot-gradle-plugin:3.5.15 resolves jackson-databind:2.21.4 through
+// spring-boot-buildpack-platform on the separate buildscript classpath.
+
+tasks.register('buildscriptDependencyInsight', DependencyInsightReportTask) {
+    dependencySpec = { dependency -> dependency.requested.displayName.contains('jackson-databind') }
+    configuration = buildscript.configurations.classpath
+    showingAllVariants = false
+}
